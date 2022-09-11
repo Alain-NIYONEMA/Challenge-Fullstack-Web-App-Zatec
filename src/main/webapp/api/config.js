@@ -1,23 +1,37 @@
 // Created by IntelliJ IDEA.
 // User: Alain-NIYONEMA
 
-const API_URL = "/Challenge_Fullstack_Web_App_Zatec_war_exploded/api/";
+const API_URL = ROOT_URL + "/api";
 
-async function fetchAPI(method, data) {
+async function fetchAPI(url, method, data) {
 
-    return await fetch(API_URL, {
-        method: method,
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-    })
-        .then((response) => response.json())
-        .then((data) => {
-            console.log('Success:', data);
+    if(method !== "GET") {
+
+        url = appendUrlParameters(url, data);
+
+        return await fetch(url, {
+            method: method,
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        }).then((response) => {
+            return response.json();
         })
-        .catch((error) => {
-            console.error('Error:', error);
-        });
+
+    }else {
+
+        url = appendUrlParameters(url, data);
+
+        return await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        }).then((response) => {
+            return response.json();
+        })
+
+    }
 
 }

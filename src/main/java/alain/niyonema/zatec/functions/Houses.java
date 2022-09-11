@@ -1,37 +1,41 @@
-package alain.niyonema.zatec;
+package alain.niyonema.zatec.functions;
 
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
 
-@WebServlet(name = "APIServlet", value = "/api")
-public class APIServlet extends HttpServlet {
+public class Houses {
 
-    public void init() {
+    public static String doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-    }
-
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
+        String id = request.getParameter("id");
+        String name = request.getParameter("name");
         String page = request.getParameter("page");
         String pageSize = request.getParameter("pageSize");
 
-        String link = "https://www.anapioficeandfire.com/api/houses?";
+        String link = "https://www.anapioficeandfire.com/api/houses";
+
+        if(id != null && !id.isEmpty()) {
+            link += "/" + id;
+        }
+
+        link += "?";
+
+        if(name != null && !name.isEmpty()) {
+            link += "&name=" + name;
+        }
 
         if(page != null && !page.isEmpty()) {
-            link += "page=" + page;
+            link += "&page=" + page;
         }
 
         if(pageSize != null && !pageSize.isEmpty()) {
-            link += "pageSize=" + pageSize;
+            link += "&pageSize=" + pageSize;
         }
 
         // fetch the API url
@@ -52,13 +56,7 @@ public class APIServlet extends HttpServlet {
 
         connection.disconnect();
 
-        response.setCharacterEncoding("UTF-8");
-        response.setContentType("application/json");
-        response.getWriter().write(responseMessage.toString());
-    }
-
-    public void destroy() {
-
+        return responseMessage;
     }
 
 }

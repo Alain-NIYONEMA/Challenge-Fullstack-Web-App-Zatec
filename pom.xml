@@ -5,9 +5,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>alain.niyonema</groupId>
-    <artifactId>Challenge-Fullstack-Web-App-Zatec</artifactId>
+    <artifactId>Alain-WebApp-Zatec</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <name>Challenge-Fullstack-Web-App-Zatec</name>
+    <name>Alain-WebApp-Zatec</name>
     <packaging>war</packaging>
 
     <properties>

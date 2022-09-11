@@ -3,9 +3,15 @@
 
 async function getHouse(id) {
     const data = { id: `${id}` };
-    return await fetchAPI(data);
+    return await fetchAPI('POST', data);
 }
 
 async function getHouses() {
-    return await fetchAPI();
+    const data = { };
+    return await fetchAPI('GET', data);
+}
+
+async function searchHouses(keyword) {
+    const data = { name: `${keyword}` };
+    return await fetchAPI('POST', data);
 }

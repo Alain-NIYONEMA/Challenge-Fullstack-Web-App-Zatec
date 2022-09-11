@@ -3,10 +3,10 @@
 
 const API_URL = "/Challenge_Fullstack_Web_App_Zatec_war_exploded/api/";
 
-async function fetchAPI(data) {
+async function fetchAPI(method, data) {
 
     return await fetch(API_URL, {
-        method: 'POST',
+        method: method,
         headers: {
             'Content-Type': 'application/json',
         },

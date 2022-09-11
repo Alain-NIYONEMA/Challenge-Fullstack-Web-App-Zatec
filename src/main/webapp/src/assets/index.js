@@ -2,10 +2,15 @@
 // User: Alain-NIYONEMA
 
 
-// Parameters
+// initialize PARAMETERS
 let keyword = "";
 let page = 1;
 let pageSize = 6;
+
+
+// initialize VIEWS
+const viewBack = document.querySelector(".ztc-alain-nav__top-menu-back");
+const viewRefresh = document.querySelector(".ztc-alain-nav__top-menu-refresh");
 
 
 // load initial data
@@ -16,6 +21,9 @@ onLoadHouses();
 document.querySelector(".ztc-alain-search-form").addEventListener("submit", function (e) {
     e.preventDefault();
 
+    // switch views
+    routeViews();
+    
     // call 'search' function
     onSearchHouses();
 
@@ -27,6 +35,18 @@ document.querySelector(".ztc-alain-load-more-btn").addEventListener("click", fun
 
     // call 'loadMore' function
     onLoadMoreHouses();
+
+});
+
+
+// onChange "FILTER"
+document.querySelector(".ztc-alain-houses-filter-size select").addEventListener("change", function () {
+
+    // update "pageSize" value
+    pageSize = this.value;
+
+    // call 'loadData' function
+    onLoadHouses();
 
 });
 
@@ -52,7 +72,7 @@ function onLoadHouses () {
 
             // build items views
             const housesHTML = houses.map((itemHouse, index) => {
-                    return viewHouseItem(itemHouse, index);
+                    return viewHouseItemCard(itemHouse, index);
                 }
             ).join('');
 
@@ -61,7 +81,7 @@ function onLoadHouses () {
 
             // remove loader
             document.querySelector(".ztc-alain-houses-list").classList.remove("ztc-alain-loader");
-            document.querySelector(".ztc-alain-load-more-btn").style.disaply = "none";
+            document.querySelector(".ztc-alain-load-more-btn").style.disaply = "block";
 
         })
         .catch((error) => {
@@ -95,7 +115,7 @@ function onSearchHouses() {
 
             // build items views
             const housesHTML = houses.map((itemHouse, index) => {
-                    return viewHouseItem(itemHouse, index);
+                    return viewHouseItemCard(itemHouse, index);
                 }
             ).join('');
 
@@ -104,7 +124,7 @@ function onSearchHouses() {
 
             // remove loader
             document.querySelector(".ztc-alain-houses-list").classList.remove("ztc-alain-loader");
-            document.querySelector(".ztc-alain-load-more-btn").style.disaply = "none";
+            document.querySelector(".ztc-alain-load-more-btn").style.disaply = "block";
 
         })
         .catch((error) => {
@@ -132,7 +152,7 @@ function onLoadMoreHouses () {
 
             // build items views
             const housesHTML = houses.map((itemHouse, index) => {
-                    return viewHouseItem(itemHouse, index);
+                    return viewHouseItemCard(itemHouse, index);
                 }
             ).join('');
 
@@ -141,7 +161,7 @@ function onLoadMoreHouses () {
 
             // remove loader
             document.querySelector(".ztc-alain-load-more").classList.remove("ztc-alain-loader");
-            document.querySelector(".ztc-alain-load-more-btn").style.disaply = "none";
+            document.querySelector(".ztc-alain-load-more-btn").style.disaply = "block";
 
         })
         .catch((error) => {
@@ -151,10 +171,44 @@ function onLoadMoreHouses () {
 }
 
 
+// get "VIEW of HOUSE ITEM Card"
+function viewHouseItemCard(itemHouse, index) {
+    return `
+        <div class="ztc-alain-houses__item">
+            <div class="ztc-alain-houses__item-image">
+                <img class="ztc-alain-houses__item-img" src="${ROOT_URL}/public/logo-dark.png" alt=""/>
+            </div>
+            <div class="ztc-alain-house-item__content">
+                <div class="ztc-alain-houses__item-title">
+                    ${itemHouse.name}
+                </div>
+                <div class="ztc-alain-houses__item-details">
+                    ${itemHouse.coatOfArms}
+                </div>
+            </div>
+            <div class="ztc-alain-houses__item-footer">
+                <div class="ztc-alain-houses__item-region">
+                    ${itemHouse.region}
+                </div>
+                <div class="ztc-alain-houses__item-button">
+                    <a onclick="viewHouse('${index + 1}')">
+                        Read more
+                        <i class="fa fa-caret-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+
 // get "VIEW of HOUSE ITEM"
 function viewHouseItem(itemHouse, index) {
     return `
         <div class="ztc-alain-house__item">
+            <div class="ztc-alain-house__item-head">
+                ${itemHouse.name}
+            </div>
             <div class="ztc-alain-house__item-image">
                 <img class="ztc-alain-house__item-img" src="${ROOT_URL}/public/logo-dark.png" alt=""/>
             </div>
@@ -164,6 +218,14 @@ function viewHouseItem(itemHouse, index) {
                 </div>
                 <div class="ztc-alain-house__item-details">
                     ${itemHouse.coatOfArms}
+                    <div>
+                        <span>EATS:</span>
+                        ${itemHouse.seats}
+                    </div>
+                    <div>
+                        <span>HEIR:</span>
+                        ${itemHouse.heir}
+                    </div>
                 </div>
             </div>
             <div class="ztc-alain-house__item-footer">
@@ -171,20 +233,21 @@ function viewHouseItem(itemHouse, index) {
                     ${itemHouse.region}
                 </div>
                 <div class="ztc-alain-house__item-button">
-                    <a href="#house" onclick="viewHouse('${index}')">
-                        Read more
-                    </a>
+                    ${itemHouse.founded}
                 </div>
             </div>
         </div>
     `;
 }
 
+
 function viewHouse(id) {
 
     // switch layouts
     document.querySelector(".ztc-alain-houses").style.display = "none";
     document.querySelector(".ztc-alain-house").style.display = "block";
+    viewBack.style.display = "block";
+    viewRefresh.style.display = "none";
 
     // clear view
     document.querySelector(".ztc-alain-house").innerHTML = "";
@@ -215,13 +278,16 @@ function viewHouse(id) {
 }
 
 window.addEventListener('popstate', (event) => {
+    routeViews();
     history.go(1);
 });
-function onBack() {
+function routeViews() {
 
     // switch layouts
     document.querySelector(".ztc-alain-house").style.display = "none";
     document.querySelector(".ztc-alain-houses").style.display = "block";
+    viewBack.style.display = "none";
+    viewRefresh.style.display = "block";
 
 }
 history.pushState({ state: 1 }, '');

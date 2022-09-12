@@ -5,27 +5,90 @@ import java.util.List;
 
 public class House {
 
-    int id;
-
-    String name;
-    String region;
-    String coatOfArms;
-    String words;
-    String currentLord;
-    String heir;
-    String overlord;
-    String founded;
-    String founder;
-    String diedOut;
-    String ancestralWeapons;
-    String cadetBranches;
-
-    List<String> titles;
-    List<String> seats;
-    List<String> swornMembers;
+    /**
+     * The hypermedia ID of this resource
+     */
+    private int id;
 
 
-    // setors methods
+    /**
+     *
+     */
+    private String name;
+
+    /**
+     *
+     */
+    private String region;
+
+    /**
+     *
+     */
+    private String coatOfArms;
+
+    /**
+     *
+     */
+    private String words;
+
+    /**
+     *
+     */
+    private String currentLord;
+
+    /**
+     *
+     */
+    private String heir;
+
+    /**
+     *
+     */
+    private String overlord;
+
+    /**
+     *
+     */
+    private String founded;
+
+    /**
+     *
+     */
+    private String founder;
+
+    /**
+     *
+     */
+    private String diedOut;
+
+    /**
+     *
+     */
+
+    private List<String> ancestralWeapons;
+
+    /**
+     *
+     */
+    private List<String> cadetBranches;
+
+    /**
+     *
+     */
+    private List<String> titles;
+
+    /**
+     *
+     */
+    private List<String> seats;
+
+    /**
+     *
+     */
+    private List<String> swornMembers;
+
+
+    // setters methods
 
     public void setId(int id) {
         this.id = id;
@@ -71,11 +134,11 @@ public class House {
         this.diedOut = diedOut;
     }
 
-    public void setAncestralWeapons(String ancestralWeapons) {
+    public void setAncestralWeapons(List<String> ancestralWeapons) {
         this.ancestralWeapons = ancestralWeapons;
     }
 
-    public void setCadetBranches(String cadetBranches) {
+    public void setCadetBranches(List<String> cadetBranches) {
         this.cadetBranches = cadetBranches;
     }
 
@@ -138,11 +201,11 @@ public class House {
         return diedOut;
     }
 
-    public String getAncestralWeapons() {
+    public List<String> getAncestralWeapons() {
         return ancestralWeapons;
     }
 
-    public String getCadetBranches() {
+    public List<String> getCadetBranches() {
         return cadetBranches;
     }
 

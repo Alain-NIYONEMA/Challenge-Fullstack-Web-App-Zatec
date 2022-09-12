@@ -191,7 +191,7 @@ function viewHouseItemCard(itemHouse, index) {
                     ${itemHouse.region}
                 </div>
                 <div class="ztc-alain-houses__item-button">
-                    <a onclick="viewHouse('${index + 1}')">
+                    <a onclick="viewHouse('${itemHouse.id}')">
                         Read more
                         <i class="fa fa-caret-right"></i>
                     </a>

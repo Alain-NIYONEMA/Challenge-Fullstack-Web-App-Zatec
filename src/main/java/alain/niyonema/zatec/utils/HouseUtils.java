@@ -91,11 +91,13 @@ public class HouseUtils {
             }
 
             if(jsonObject.has(HouseParams.DATA_ANCESTRAL_WEAPONS)) {
-                house.setAncestralWeapons(jsonObject.get(HouseParams.DATA_ANCESTRAL_WEAPONS).getAsString());
+                List<String> ancestralWeapons = AlnUtils.toArray(jsonObject.get(HouseParams.DATA_ANCESTRAL_WEAPONS).getAsJsonArray());
+                house.setAncestralWeapons(ancestralWeapons);
             }
 
             if(jsonObject.has(HouseParams.DATA_CADET_BRANCHES)) {
-                house.setCadetBranches(jsonObject.get(HouseParams.DATA_CADET_BRANCHES).getAsString());
+                List<String> cadetBranches = AlnUtils.toArray(jsonObject.get(HouseParams.DATA_CADET_BRANCHES).getAsJsonArray());
+                house.setCadetBranches(cadetBranches);
             }
 
             if(jsonObject.has(HouseParams.DATA_TITLES)) {

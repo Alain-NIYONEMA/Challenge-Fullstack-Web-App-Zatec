@@ -1,47 +1,49 @@
 package alain.niyonema.zatec.api;
 
-import alain.niyonema.zatec.functions.Houses;
+import alain.niyonema.zatec.functions.HousesFetch;
 
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
 
 
 @WebServlet(name = "APIServlet", value = "/api")
 public class APIServlet extends HttpServlet {
 
+    HousesFetch housesFetch;
+
     public void init() {
 
+        housesFetch = new HousesFetch();
+
     }
+
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        String responseMessage = Houses.doGet(request, response);
+        String responseMessageJson = housesFetch.processRequest(request);
 
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json");
-        response.getWriter().write(responseMessage.toString());
+        response.getWriter().write(responseMessageJson);
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        String responseMessage = Houses.doGet(request, response);
+        String responseMessageJson = housesFetch.processRequest(request);
 
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json");
-        response.getWriter().write(responseMessage.toString());
+        response.getWriter().write(responseMessageJson);
     }
 
+
     public void destroy() {
+
+        housesFetch = null;
 
     }
 

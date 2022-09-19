@@ -1,14 +1,19 @@
 package alain.niyonema.zatec;
 
-import alain.niyonema.zatec.utils.AlnUtils;
+import alain.niyonema.zatec.api.APIServlet;
+import alain.niyonema.zatec.functions.HousesFetch;
 import org.junit.jupiter.api.*;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockHttpServletResponse;
+
+import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 
 public class HousesFetchTest {
 
-    private MyServlet servlet;
+    private APIServlet apiServlet;
     private MockHttpServletRequest request;
     private MockHttpServletResponse response;
 
@@ -22,13 +27,24 @@ public class HousesFetchTest {
     }
 
     @Test
-    public void processRequestTest(){
+    public void processRequestTest() throws IOException {
         System.out.println("TEST: processRequest");
 
-        assertTrue(AlnUtils.isEmpty(null));
-        assertTrue(AlnUtils.isEmpty(""));
-        assertFalse(AlnUtils.isEmpty(" "));
-        assertFalse(AlnUtils.isEmpty("abc"));
+        apiServlet = new APIServlet();
+        request = new MockHttpServletRequest();
+        response = new MockHttpServletResponse();
+
+        apiServlet.doGet(request, response);
+
+        assertEquals(16, response.getContentLength());
+        assertEquals(200, response.getStatus());
+
+        HousesFetch housesFetch = new HousesFetch();
+
+        String jsonResponse = housesFetch.processRequest(request);
+
+        assertEquals(4, jsonResponse.length());
+
     }
 
     @AfterEach

@@ -24,17 +24,17 @@ public class AlnUtils {
         int number;
         try {
             number = Integer.parseInt(text);
+            return number;
         } catch (NumberFormatException e) {
-            number = placeholder;
+            return placeholder;
         }
-        return number;
     }
 
 
     /**
      convert JsonArray to List
      */
-    public static List<String> toArray(JsonArray jsonArray) {
+    public static List<String> toList(JsonArray jsonArray) {
         List<String> list = new ArrayList<>();
         for(JsonElement element : jsonArray) {
             list.add(element.getAsString());
@@ -44,16 +44,30 @@ public class AlnUtils {
 
 
     /**
+     convert JsonArray to List
+     */
+    public static JsonArray fromList(List<String> list) {
+        JsonArray jsonArray = new JsonArray();
+        for(String element : list) {
+            jsonArray.add(element);
+        }
+        return jsonArray;
+    }
+
+
+    /**
     convert JSOn String to JsonArray
      */
     public static JsonArray toJsonArray(String json) {
-        JsonArray jsonArray;
+        JsonArray jsonArray = null;
 
         try {
-            jsonArray = JsonParser.parseString(json).getAsJsonArray();
-        } catch (JsonSyntaxException e) {
-            e.printStackTrace();
-            jsonArray = new JsonArray();
+            JsonElement jsonElement = JsonParser.parseString(json);
+            if(jsonElement != null) {
+                jsonArray = jsonElement.getAsJsonArray();
+            }
+        } catch (Exception e) {
+            // e.printStackTrace();
         }
 
         return jsonArray;
@@ -64,16 +78,19 @@ public class AlnUtils {
     convert JSOn String to JsonObject
      */
     public static JsonObject toJsonObject(String json) {
-        JsonObject jsonObject;
+        JsonObject jsonObject = null;
 
         try {
-            jsonObject = JsonParser.parseString(json).getAsJsonObject();
-        } catch (JsonSyntaxException e) {
-            e.printStackTrace();
-            jsonObject = new JsonObject();
+            JsonElement jsonElement = JsonParser.parseString(json);
+            if(jsonElement != null) {
+                jsonObject = jsonElement.getAsJsonObject();
+            }
+        } catch (Exception e) {
+            // e.printStackTrace();
         }
 
         return jsonObject;
     }
+
 
 }

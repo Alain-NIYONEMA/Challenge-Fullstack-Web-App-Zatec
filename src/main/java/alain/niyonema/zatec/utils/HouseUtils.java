@@ -1,5 +1,6 @@
 package alain.niyonema.zatec.utils;
 
+import alain.niyonema.zatec.constants.Config;
 import alain.niyonema.zatec.constants.HouseParams;
 import alain.niyonema.zatec.models.House;
 import com.google.gson.JsonArray;
@@ -15,18 +16,51 @@ public class HouseUtils {
     /**
      convert JsonArray into list of House objects
      */
-    public static List<House> fromJSON(JsonArray jsonArray) {
-        List<House> listHouses = new ArrayList<>();
+    public static List<House> fromJSON(JsonArray jsonArray, String keyword, int offset, int pageSize, boolean match) {
+        List<House> listHouses;
 
-        for(JsonElement element : jsonArray) {
+        if(jsonArray != null) {
 
-            House house = fromJSON(element.getAsJsonObject());
+            listHouses = new ArrayList<>();
 
-            listHouses.add(house);
+            int i = 0;
+            for (JsonElement element : jsonArray) {
 
+                House house = fromJSON(element.getAsJsonObject());
+
+                if(AlnUtils.isEmpty(keyword)) {
+                    i++;
+
+                    listHouses.add(house);
+
+                }else {
+
+                    String keywords = (""+ house.getName()).toLowerCase();
+
+                    boolean equal = keywords.equals(keyword.toLowerCase());
+                    boolean like = keywords.contains(keyword.toLowerCase());
+
+                    if((match && equal) || (!match && like)) {
+                        i++;
+
+                        if(i <= offset) {
+                            continue;
+                        }
+                        if(i > offset + pageSize) {
+                            break;
+                        }
+
+                        listHouses.add(house);
+                    }
+
+                }
+
+            }
+
+            return listHouses;
         }
 
-        return listHouses;
+        return null;
     }
 
 
@@ -42,12 +76,9 @@ public class HouseUtils {
             if(jsonObject.has(HouseParams.DATA_URL)) {
                 String url = jsonObject.get(HouseParams.DATA_URL).getAsString();
                 int index = url.lastIndexOf("/");
-                int id = AlnUtils.toInt(url.substring(index), 0);
+                int id = AlnUtils.toInt(url.substring(index+1), 0);
                 house.setId(id);
-            }
-
-            if(jsonObject.has(HouseParams.DATA_NAME)) {
-                house.setName(jsonObject.get(HouseParams.DATA_NAME).getAsString());
+                house.setUrl(Config.APP_URL +"?id="+ id);
             }
 
             if(jsonObject.has(HouseParams.DATA_NAME)) {
@@ -91,31 +122,85 @@ public class HouseUtils {
             }
 
             if(jsonObject.has(HouseParams.DATA_ANCESTRAL_WEAPONS)) {
-                List<String> ancestralWeapons = AlnUtils.toArray(jsonObject.get(HouseParams.DATA_ANCESTRAL_WEAPONS).getAsJsonArray());
+                List<String> ancestralWeapons = AlnUtils.toList(jsonObject.get(HouseParams.DATA_ANCESTRAL_WEAPONS).getAsJsonArray());
                 house.setAncestralWeapons(ancestralWeapons);
             }
 
             if(jsonObject.has(HouseParams.DATA_CADET_BRANCHES)) {
-                List<String> cadetBranches = AlnUtils.toArray(jsonObject.get(HouseParams.DATA_CADET_BRANCHES).getAsJsonArray());
+                List<String> cadetBranches = AlnUtils.toList(jsonObject.get(HouseParams.DATA_CADET_BRANCHES).getAsJsonArray());
                 house.setCadetBranches(cadetBranches);
             }
 
             if(jsonObject.has(HouseParams.DATA_TITLES)) {
-                List<String> titles = AlnUtils.toArray(jsonObject.get(HouseParams.DATA_TITLES).getAsJsonArray());
+                List<String> titles = AlnUtils.toList(jsonObject.get(HouseParams.DATA_TITLES).getAsJsonArray());
                 house.setTitles(titles);
             }
 
             if(jsonObject.has(HouseParams.DATA_SEATS)) {
-                List<String> seats = AlnUtils.toArray(jsonObject.get(HouseParams.DATA_SEATS).getAsJsonArray());
+                List<String> seats = AlnUtils.toList(jsonObject.get(HouseParams.DATA_SEATS).getAsJsonArray());
                 house.setSeats(seats);
             }
 
             if(jsonObject.has(HouseParams.DATA_SWORN_MEMBERS)) {
-                List<String> swornMembers = AlnUtils.toArray(jsonObject.get(HouseParams.DATA_SWORN_MEMBERS).getAsJsonArray());
+                List<String> swornMembers = AlnUtils.toList(jsonObject.get(HouseParams.DATA_SWORN_MEMBERS).getAsJsonArray());
                 house.setSwornMembers(swornMembers);
             }
 
             return house;
+        }
+
+        return null;
+    }
+
+
+    public static JsonArray toJsonArray(List<House> listHouses) {
+        JsonArray jsonArray;
+
+        if(listHouses != null) {
+
+            jsonArray = new JsonArray();
+
+            for(House house : listHouses) {
+
+                JsonObject jsonObject = toJsonObject(house);
+
+                jsonArray.add(jsonObject);
+
+            }
+
+            return jsonArray;
+        }
+
+        return null;
+    }
+
+
+    public static JsonObject toJsonObject(House house) {
+        JsonObject jsonObject;
+
+        if(house != null) {
+
+            jsonObject = new JsonObject();
+
+            jsonObject.addProperty(HouseParams.DATA_ID, house.getId());
+            jsonObject.addProperty(HouseParams.DATA_URL, house.getUrl());
+            jsonObject.addProperty(HouseParams.DATA_NAME, house.getName());
+            jsonObject.addProperty(HouseParams.DATA_REGION, house.getRegion());
+            jsonObject.addProperty(HouseParams.DATA_COAT_OF_ARMS, house.getCoatOfArms());
+            jsonObject.addProperty(HouseParams.DATA_WORDS, house.getWords());
+            jsonObject.addProperty(HouseParams.DATA_CURRENT_LOAD, house.getCurrentLord());
+            jsonObject.addProperty(HouseParams.DATA_HEIR, house.getHeir());
+            jsonObject.addProperty(HouseParams.DATA_OVERLOAD, house.getOverlord());
+            jsonObject.addProperty(HouseParams.DATA_FOUNDED, house.getFounded());
+            jsonObject.addProperty(HouseParams.DATA_FOUNDER, house.getFounder());
+            jsonObject.addProperty(HouseParams.DATA_DIED_OUT, house.getDiedOut());
+            jsonObject.add(HouseParams.DATA_ANCESTRAL_WEAPONS, AlnUtils.fromList(house.getAncestralWeapons()));
+            jsonObject.add(HouseParams.DATA_CADET_BRANCHES, AlnUtils.fromList(house.getCadetBranches()));
+            jsonObject.add(HouseParams.DATA_TITLES, AlnUtils.fromList(house.getTitles()));
+            jsonObject.add(HouseParams.DATA_SEATS, AlnUtils.fromList(house.getSeats()));
+            jsonObject.add(HouseParams.DATA_SWORN_MEMBERS, AlnUtils.fromList(house.getSwornMembers()));
+
+            return jsonObject;
         }
 
         return null;

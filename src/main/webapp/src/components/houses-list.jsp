@@ -9,6 +9,11 @@
 
     <div class="ztc-alain-houses-filter">
 
+        <div class="ztc-alain-houses-filter-match">
+            <span>Match:</span>
+            <input type="checkbox">
+        </div>
+
         <div class="ztc-alain-houses-filter-size">
             <span>Items:</span>
             <select>

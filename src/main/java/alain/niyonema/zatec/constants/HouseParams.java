@@ -5,6 +5,9 @@ public class HouseParams {
 
     public static final String SERVER_API_LINK = "https://www.anapioficeandfire.com/api/houses";
 
+
+    public static final String DATA_ID = "id";
+
     public static final String DATA_URL = "url";
     public static final String DATA_NAME = "name";
     public static final String DATA_REGION = "region";

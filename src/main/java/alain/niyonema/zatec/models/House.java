@@ -14,6 +14,12 @@ public class House {
     /**
      *
      */
+    private String url;
+
+
+    /**
+     *
+     */
     private String name;
 
     /**
@@ -94,6 +100,10 @@ public class House {
         this.id = id;
     }
 
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -159,6 +169,10 @@ public class House {
 
     public int getId() {
         return id;
+    }
+
+    public String getUrl() {
+        return url;
     }
 
     public String getName() {

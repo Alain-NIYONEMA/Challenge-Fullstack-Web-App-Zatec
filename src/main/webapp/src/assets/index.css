@@ -7,7 +7,7 @@
     margin: 0;
     overflow-y: scroll;
     overflow-x: hidden;
-    background: #eaeaea;
+    background: #bcb7b7;
     font-family: Arial, Helvetica, sans-serif;
 }
 .ztc-alain::-webkit-scrollbar {
@@ -35,6 +35,7 @@
 
 /*--------------- Top Navigation Bar ---------------*/
 .ztc-alain-nav__top {
+    z-index: 10;
     position: fixed;
     display: flex;
     width: 100%;
@@ -70,6 +71,12 @@
     background-color: #2196F3;
     color: white;
 }
+.ztc-alain-nav__top .fa {
+    background: #016e54;
+    border-radius: 50%;
+    padding: 5px;
+    color: #FFFFFF;
+}
 .ztc-alain-nav__top-logo {
     width: 20%;
     text-align: center;
@@ -78,6 +85,7 @@
     margin: 4px 8px;
     text-align: center;
     border-radius: 10px;
+    border: solid 2px #016e54;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
 }
 .ztc-alain-nav__top-logo img {
@@ -95,24 +103,28 @@
 .ztc-alain-search-container {
     float: right;
     width: 40%;
-    margin-top: 10px;
+    margin-top: 5px;
 }
 .ztc-alain-search-form {
     width: 100%;
-    max-width: 250px;
+    max-width: 350px;
     float: right;
-    padding: 8px;
+    padding: 8px 8px;
 }
 .ztc-alain-search-container input[type=text] {
-    width: calc(100% - 68px);
+    width: calc(100% - 82px);
+    height: 30px;
     margin-left: 16px;
     padding: 6px;
     font-size: 17px;
-    border: none;
+    background: #d9d9d9;
+    border-radius: 10px 0 0 10px;
+    border: solid 2px #016e54;
     background: #d9d9d9;
 }
 .ztc-alain-search-container button {
-    width: 40px;
+    width: 50px;
+    height: 46px;
     float: right;
     padding: 6px 10px;
     background: #009688;
@@ -128,16 +140,17 @@
 /*--------------- Houses ---------------*/
 .ztc-alain-houses {
     height: 100%;
-    padding: 100px 32px 16px;
+    overflow-x: hidden;
+    padding: 79px 0 16px;
 }
 .ztc-alain-houses-list {
     display: flex;
-    width: 100%;
+    width: 90%;
     height: 100%;
-    min-height: 80vh;
     flex-wrap: wrap;
     gap: 8px;
-    padding: 8px 8px;
+    padding: 32px 8px;
+    margin: 30px auto auto;
 }
 .ztc-alain-houses__item {
     width: calc(32% - 16px);
@@ -146,6 +159,7 @@
     transition: 0.3s;
     margin: 8px;
     background: #ffffff;
+    border-radius: 10px 0px 30px 0px;
 }
 .ztc-alain-houses__item:hover {
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
@@ -158,6 +172,7 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+    border-radius: 10px;
 }
 .ztc-alain-houses__item-img:hover {
     zoom: 1.5;
@@ -171,12 +186,19 @@
     font-size: 24px;
     font-weight: 600;
     margin: 8px 0;
+    text-transform: capitalize;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: initial;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
+}
+.ztc-alain-houses__item-title span {
+    background: #2dd3aa;
+    color: #000000;
+    border-radius: 10px;
+    padding: 0 4px;
 }
 .ztc-alain-houses__item-details {
     height: 40px;
@@ -203,14 +225,46 @@
 }
 .ztc-alain-houses__item-button a {
     float: right;
-    text-decoration: underline;
     cursor: pointer;
-    font-weight: 500;
+    font-weight: 600;
+    min-width: max-content;
+    font-size: 13px;
+    color: #FFFFFF;
+    padding: 5px 5px;
+    border: solid 2px #016e54;
+    border-radius: 8px;
+    background: #0f8f83;
+}
+.ztc-alain-houses-list .empty-houses {
+    margin: auto;
+}
+.ztc-alain-houses-list .empty-houses p {
+    text-align: center;
+    margin-top: 30vh;
+    color: #000000;
+    font-weight: 600;
+    background: #FFFFFF;
+    border-radius: 10px;
+    padding: 5px;
+    font-size: 23px;
 }
 
 /*--------------- Filter ---------------*/
-.ztc-alain-houses-filter-size {
+.ztc-alain-houses-filter {
+    position: fixed;
+    width: 100%;
+    background: #eaeaea;
+    padding: 10px;
+    box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%);
+}
+.ztc-alain-houses-filter-match {
     float: right;
+    margin-right: 40px;
+    margin-top: 5px;
+}
+.ztc-alain-houses-filter-size {
+    float: left;
+    margin-right: 40px;
 }
 .ztc-alain-houses-filter-size span {
 
@@ -231,8 +285,8 @@
 /*--------------- House View ---------------*/
 .ztc-alain-house {
     display: none;
+    overflow-x: hidden;
     height: 100%;
-    min-height: 80vh;
     padding: 90px 32px 16px;
 }
 .ztc-alain-house__item {
@@ -262,10 +316,12 @@
     padding: 8px 8px;
 }
 .ztc-alain-house__item-head {
+    position: absolute;
+    width: 92%;
     height: 60px;
     font-size: 24px;
     font-weight: 600;
-    margin-top: 8px;
+    margin-top: 28px;
     padding: 4px;
     text-align: center;
     overflow: hidden;
@@ -274,6 +330,15 @@
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
+}
+.ztc-alain-house__item-head-title {
+    width: max-content;
+    min-width: 50%;
+    margin: auto;
+    padding: 8px;
+    border-radius: 10px;
+    border: solid 2px #000000;
+    background: #FFFFFF;
 }
 .ztc-alain-house__item-title {
     height: 60px;
@@ -293,10 +358,13 @@
     overflow: hidden;
 }
 .ztc-alain-house__item-details div {
-    padding: 4px 0;
+    padding: 8px 0;
+    margin: 20px 50px;
+    border-bottom: solid 2px #000000;
 }
 .ztc-alain-house__item-details span {
     font-weight: 700;
+    text-transform: uppercase;
 }
 .ztc-alain-house__item-footer {
     display: flex;
@@ -311,6 +379,7 @@
     cursor: pointer;
     text-decoration: underline;
     font-weight: 500;
+    min-width: max-content;
 }
 .ztc-alain-house__item-button a {
     float: right;
@@ -321,6 +390,7 @@
     width: 100%;
     text-align: center;
     padding: 8px;
+    min-height: unset !important;
 }
 .ztc-alain-load-more-btn {
     width: 100px;
@@ -331,7 +401,7 @@
     color: #FFFFFF;
     background: #0a8869;
     border-radius: 10px;
-    border: solid 2px #016e54;
+    border: solid 2px #FFFFFF;
 }
 .ztc-alain-load-more-btn:hover {
     background: #016e54;
@@ -418,18 +488,20 @@
 /*--------------- Loader ---------------*/
 .ztc-alain-loader{
     position:relative;
-    color:transparent!important
+    color:transparent!important;
+    min-height: 70vh;
 }.ztc-alain-loader>*{
-     opacity:.2!important
+     /*opacity:.2!important;*/
+     opacity: 0!important;
  }
 .ztc-alain-loader:after{
     position:absolute;
-    top:calc(50% - 4.0rem/2);
-    left:calc(50% - 4.0rem/2);
+    top:calc(50% - 3.0rem/2);
+    left:calc(50% - 3.0rem/2);
     content:''
 }
 .ztc-alain-loader:after{
-    border: 4px solid #2dd3aa; animation: ztc-alain-loader-anim 1s linear infinite; background: #FFFFFF00; display:block; width:4.0rem; height:4.0rem; border-radius: 50%; border-bottom-color: transparent;
+    border: 4px solid #2dd3aa; animation: ztc-alain-loader-anim 1s linear infinite; background: #FFFFFF00; display:block; width:3.0rem; height:3.0rem; border-radius: 50%; border-bottom-color: transparent;
 }
 @keyframes ztc-alain-loader-anim {
     0% {
@@ -471,7 +543,7 @@
 
 
 /*--------------- Tablet View ---------------*/
-@media screen and (max-width: 730px) {
+@media only screen and (max-width: 730px) {
 
     .ztc-alain-nav__top {
         flex-wrap: wrap;
@@ -496,14 +568,17 @@
     }
 
     .ztc-alain-houses {
-        padding-top: 120px;
+        padding-top: 140px;
+        padding-left: 0;
+        padding-right: 0;
+    }
+    .ztc-alain-house {
+        padding-top: 150px;
         padding-left: 8px;
         padding-right: 8px;
     }
-    .ztc-alain-house {
-        padding-top: 120px;
-        padding-left: 8px;
-        padding-right: 8px;
+    .ztc-alain-houses-list {
+        width: 94%;
     }
     .ztc-alain-houses__item {
         width: calc(48% - 16px);
@@ -511,12 +586,22 @@
 
 }
 
-
 /*--------------- Mobile View ---------------*/
-@media screen and (max-width: 442px) {
+@media only screen and (max-width: 430px) {
 
+    .ztc-alain-houses-list {
+        width: 94%;
+    }
+    .ztc-alain-houses {
+        padding-top: 140px;
+         padding-left: 0;
+         padding-right: 0;
+    }
     .ztc-alain-houses__item {
         width: calc(100% - 32px);
+    }
+    .ztc-alain-house__item-details div {
+        margin: 10px 10px;
     }
 
 }

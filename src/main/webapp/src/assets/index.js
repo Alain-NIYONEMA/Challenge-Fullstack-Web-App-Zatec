@@ -6,6 +6,7 @@
 let keyword = "";
 let page = 1;
 let pageSize = 6;
+let match = false;
 
 
 // initialize VIEWS
@@ -21,11 +22,34 @@ onLoadHouses();
 document.querySelector(".ztc-alain-search-form").addEventListener("submit", function (e) {
     e.preventDefault();
 
+    // get typed keyword
+    keyword = document.querySelector(".ztc-alain-search-form input").value;
+
+    if(keyword.length < 3) {
+        return;
+    }
+
     // switch views
     routeViews();
     
     // call 'search' function
     onSearchHouses();
+
+});
+
+
+// onChange "SEARCH typing"
+document.querySelector(".ztc-alain-search-form input").addEventListener("change", function (e) {
+    e.preventDefault();
+
+    // get typed keyword
+    keyword = document.querySelector(".ztc-alain-search-form input").value;
+
+    if(keyword.length < 3) {
+        document.querySelector(".ztc-alain-search-form button").setAttribute("disabled", true);
+    }else {
+        document.querySelector(".ztc-alain-search-form button").removeAttribute("disabled");
+    }
 
 });
 
@@ -39,11 +63,23 @@ document.querySelector(".ztc-alain-load-more-btn").addEventListener("click", fun
 });
 
 
-// onChange "FILTER"
+// onChange "FILTER - Size"
 document.querySelector(".ztc-alain-houses-filter-size select").addEventListener("change", function () {
 
     // update "pageSize" value
-    pageSize = this.value;
+    pageSize = parseInt(this.value);
+
+    // call 'loadData' function
+    onLoadHouses();
+
+});
+
+
+// onChange "FILTER - Match"
+document.querySelector(".ztc-alain-houses-filter-match input").addEventListener("change", function () {
+
+    // update "pageSize" value
+    match = this.checked;
 
     // call 'loadData' function
     onLoadHouses();
@@ -62,26 +98,39 @@ function onLoadHouses () {
 
     // show a loader
     document.querySelector(".ztc-alain-houses-list").classList.add("ztc-alain-loader");
-    document.querySelector(".ztc-alain-load-more-btn").style.disaply = "none";
+    document.querySelector(".ztc-alain-load-more").style.display = "none";
 
     // fetch API
-    getHouses(keyword, page, pageSize)
-        .then((data) => {
+    getHouses(keyword, page, pageSize, match)
+        .then((response) => {
 
-            const houses = data;
+            const counts = parseInt(response.counts);
+            const houses = JSON.parse(response.data);
 
-            // build items views
-            const housesHTML = houses.map((itemHouse, index) => {
-                    return viewHouseItemCard(itemHouse, index);
-                }
-            ).join('');
+            if(counts > 0) {
+                // build items views
+                const housesHTML = houses.map((itemHouse, index) => {
+                        return viewHouseItemCard(itemHouse, index);
+                    }
+                ).join('');
 
-            // update view list
-            document.querySelector(".ztc-alain-houses-list").innerHTML += housesHTML;
+                // update view list
+                document.querySelector(".ztc-alain-houses-list").innerHTML = housesHTML;
+            }else {
+                document.querySelector(".ztc-alain-houses-list").innerHTML = `
+                    <div class='empty-houses'>
+                        <p>No house found</p>
+                    </div>
+                `;
+            }
 
             // remove loader
             document.querySelector(".ztc-alain-houses-list").classList.remove("ztc-alain-loader");
-            document.querySelector(".ztc-alain-load-more-btn").style.disaply = "block";
+
+            // show load more
+            if(counts === pageSize) {
+                document.querySelector(".ztc-alain-load-more").style.display = "block";
+            }
 
         })
         .catch((error) => {
@@ -97,34 +146,44 @@ function onSearchHouses() {
     // reset page number
     page = 1;
 
-    // get typed keyword
-    keyword = document.querySelector(".ztc-alain-search-form input").value;
-
     // clean view items
     document.querySelector(".ztc-alain-houses-list").innerHTML = "";
 
     // show a loader
     document.querySelector(".ztc-alain-houses-list").classList.add("ztc-alain-loader");
-    document.querySelector(".ztc-alain-load-more-btn").style.disaply = "none";
+    document.querySelector(".ztc-alain-load-more").style.display = "none";
 
     // fetch API
-    searchHouses(keyword, page, pageSize)
-        .then((data) => {
+    searchHouses(keyword, page, pageSize, match)
+        .then((response) => {
 
-            const houses = data;
+            const counts = parseInt(response.counts);
+            const houses = JSON.parse(response.data);
 
-            // build items views
-            const housesHTML = houses.map((itemHouse, index) => {
-                    return viewHouseItemCard(itemHouse, index);
-                }
-            ).join('');
+            if(counts) {
+                // build items views
+                const housesHTML = houses.map((itemHouse, index) => {
+                        return viewHouseItemCard(itemHouse, index);
+                    }
+                ).join('');
 
-            // update view list
-            document.querySelector(".ztc-alain-houses-list").innerHTML = housesHTML;
+                // update view list
+                document.querySelector(".ztc-alain-houses-list").innerHTML = housesHTML;
+            }else {
+                document.querySelector(".ztc-alain-houses-list").innerHTML = `
+                    <div class='empty-houses'>
+                        <p>No house found</p>
+                    </div>
+                `;
+            }
 
             // remove loader
             document.querySelector(".ztc-alain-houses-list").classList.remove("ztc-alain-loader");
-            document.querySelector(".ztc-alain-load-more-btn").style.disaply = "block";
+
+            // show load more
+            if(counts === pageSize) {
+                document.querySelector(".ztc-alain-load-more").style.display = "block";
+            }
 
         })
         .catch((error) => {
@@ -142,26 +201,33 @@ function onLoadMoreHouses () {
 
     // show a loader
     document.querySelector(".ztc-alain-load-more").classList.add("ztc-alain-loader");
-    document.querySelector(".ztc-alain-load-more-btn").style.disaply = "none";
+    document.querySelector(".ztc-alain-load-more").style.display = "block";
 
     // fetch API
-    getHouses(keyword, page, pageSize)
-        .then((data) => {
+    getHouses(keyword, page, pageSize, match)
+        .then((response) => {
 
-            const houses = data;
+            const counts = parseInt(response.counts);
+            const houses = JSON.parse(response.data);
 
-            // build items views
-            const housesHTML = houses.map((itemHouse, index) => {
-                    return viewHouseItemCard(itemHouse, index);
-                }
-            ).join('');
+            if(counts > 0) {
+                // build items views
+                const housesHTML = houses.map((itemHouse, index) => {
+                        return viewHouseItemCard(itemHouse, index);
+                    }
+                ).join('');
 
-            // append to view list
-            document.querySelector(".ztc-alain-houses-list").innerHTML += housesHTML;
+                // append to view list
+                document.querySelector(".ztc-alain-houses-list").innerHTML += housesHTML;
+            }
 
             // remove loader
             document.querySelector(".ztc-alain-load-more").classList.remove("ztc-alain-loader");
-            document.querySelector(".ztc-alain-load-more-btn").style.disaply = "block";
+
+            // show load more
+            if(counts !== pageSize) {
+                document.querySelector(".ztc-alain-load-more").style.display = "none";
+            }
 
         })
         .catch((error) => {
@@ -180,7 +246,7 @@ function viewHouseItemCard(itemHouse, index) {
             </div>
             <div class="ztc-alain-house-item__content">
                 <div class="ztc-alain-houses__item-title">
-                    ${itemHouse.name}
+                    ${itemHouse.id}. ${highlightKeyword(itemHouse.name, keyword)}
                 </div>
                 <div class="ztc-alain-houses__item-details">
                     ${itemHouse.coatOfArms}
@@ -207,33 +273,86 @@ function viewHouseItem(itemHouse, index) {
     return `
         <div class="ztc-alain-house__item">
             <div class="ztc-alain-house__item-head">
-                ${itemHouse.name}
-            </div>
-            <div class="ztc-alain-house__item-image">
-                <img class="ztc-alain-house__item-img" src="${ROOT_URL}/public/logo-dark.png" alt=""/>
-            </div>
-            <div class="ztc-alain-house-item__content">
-                <div class="ztc-alain-house__item-title">
+                <div class="ztc-alain-house__item-head-title">
                     ${itemHouse.name}
                 </div>
+            </div>
+            <div class="ztc-alain-house__item-image">
+                <img class="ztc-alain-house__item-img" src="${ROOT_URL}/public/images/houses-1.jpg" alt=""/>
+            </div>
+            <div class="ztc-alain-house-item__content">
+                <div class="ztc-alain-house__item-title-1">
+               
+                </div>
                 <div class="ztc-alain-house__item-details">
-                    ${itemHouse.coatOfArms}
                     <div>
-                        <span>EATS:</span>
-                        ${itemHouse.seats}
+                        <i class="fa fa-dot-circle-o"></i>
+                        <span>Coat Of Arms:</span>
+                        <p>${itemHouse.coatOfArms}</p>
                     </div>
                     <div>
+                        <i class="fa fa-dot-circle-o"></i>
+                        <span>EATS:</span>
+                        <p>${itemHouse.seats}</p>
+                    </div>
+                    <div>
+                        <i class="fa fa-dot-circle-o"></i>
+                        <span>REGION:</span>
+                        <p>${itemHouse.region}</p>
+                    </div>
+                    <div>
+                        <i class="fa fa-dot-circle-o"></i>
                         <span>HEIR:</span>
-                        ${itemHouse.heir}
+                        <p>${itemHouse.heir}</p>
+                    </div>
+                    <div>
+                        <i class="fa fa-dot-circle-o"></i>
+                        <span>TITLES:</span>
+                        <p>${itemHouse.titles}</p>
+                    </div>
+                    <div>
+                        <i class="fa fa-dot-circle-o"></i>
+                        <span>CURRENT LORD:</span>
+                        <p>${itemHouse.currentLord}</p>
+                    </div>
+                    <div>
+                        <i class="fa fa-dot-circle-o"></i>
+                        <span>FOUNDED:</span>
+                        <p>${itemHouse.founded}</p>
+                    </div>
+                    <div>
+                        <i class="fa fa-dot-circle-o"></i>
+                        <span>HEIR:</span>
+                        <p>${itemHouse.heir}</p>
+                    </div>
+                    <div>
+                        <i class="fa fa-dot-circle-o"></i>
+                        <span>DIED OUT:</span>
+                        <p>${itemHouse.diedOut}</p>
+                    </div>
+                    <div>
+                        <i class="fa fa-dot-circle-o"></i>
+                        <span>Ancestral Weapons:</span>
+                        <p>${itemHouse.ancestralWeapons}</p>
+                    </div>
+                    <div>
+                        <i class="fa fa-dot-circle-o"></i>
+                        <span>Cadet Branches:</span>
+                        <p>${itemHouse.cadetBranches}</p>
+                    </div>
+                    <div>
+                        <i class="fa fa-dot-circle-o"></i>
+                        <span>Sworn Members:</span>
+                        <p>${itemHouse.swornMembers}</p>
                     </div>
                 </div>
             </div>
             <div class="ztc-alain-house__item-footer">
                 <div class="ztc-alain-house__item-region">
-                    ${itemHouse.region}
+                
                 </div>
                 <div class="ztc-alain-house__item-button">
-                    ${itemHouse.founded}
+                
                 </div>
             </div>
         </div>
@@ -242,6 +361,10 @@ function viewHouseItem(itemHouse, index) {
 
 
 function viewHouse(id) {
+
+    // change url
+    let stateObj = { id: id };
+    window.history.pushState(stateObj, "House "+id, ROOT_URL + "?id="+ id);
 
     // switch layouts
     document.querySelector(".ztc-alain-houses").style.display = "none";
@@ -257,15 +380,18 @@ function viewHouse(id) {
 
     // fetch API
     getHouse(id)
-        .then((data) => {
+        .then((response) => {
 
-            const itemHouse = data;
+            const counts = parseInt(response.counts);
+            const itemHouse = JSON.parse(response.data);
 
-            // build item view
-            const houseHTML = viewHouseItem(itemHouse, id);
+            if(counts > 0) {
+                // build item view
+                const houseHTML = viewHouseItem(itemHouse, id);
 
-            // update view
-            document.querySelector(".ztc-alain-house").innerHTML = houseHTML;
+                // update view
+                document.querySelector(".ztc-alain-house").innerHTML = houseHTML;
+            }
 
             // remove loader
             document.querySelector(".ztc-alain-house").classList.remove("ztc-alain-loader");
@@ -283,6 +409,11 @@ window.addEventListener('popstate', (event) => {
 });
 function routeViews() {
 
+    // change url
+    // window.location.href = ROOT_URL;
+    let stateObj = { id: "" };
+    window.history.pushState(stateObj, "Houses", ROOT_URL + "");
+
     // switch layouts
     document.querySelector(".ztc-alain-house").style.display = "none";
     document.querySelector(".ztc-alain-houses").style.display = "block";
@@ -291,3 +422,30 @@ function routeViews() {
 
 }
 history.pushState({ state: 1 }, '');
+
+
+// got to entered house id from the url
+const user_id = getUrlParameter("id");
+
+if(user_id.length > 0) {
+    viewHouse(user_id);
+}
+
+// Highlight keywords
+function highlightKeyword(text, keyword) {
+    let highlight = ("" + text).toLowerCase();
+    if(keyword.length > 0) {
+        const keys = ("" + keyword).toLowerCase().split(" ");
+        if (("" + keyword).includes(" b")) {
+            const key = "b";
+            highlight = highlight.replace(key, "<span>" + key + "</span>");
+        }
+        for (let i = 0; i < keys.length; i++) {
+            const key = keys[i];
+            if (key != "b") {
+                highlight = highlight.replace(key, "<span>" + key + "</span>");
+            }
+        }
+    }
+    return highlight;
+}

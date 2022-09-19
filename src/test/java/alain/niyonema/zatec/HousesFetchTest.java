@@ -8,6 +8,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class HousesFetchTest {
 
+    private MyServlet servlet;
+    private MockHttpServletRequest request;
+    private MockHttpServletResponse response;
+
     @BeforeAll
     public static void beforeAll() {
         System.out.println("------------------------------ START Testing: "+ HousesFetchTest.class.getName());

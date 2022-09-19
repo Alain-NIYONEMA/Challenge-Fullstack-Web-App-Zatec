@@ -2,6 +2,9 @@ package alain.niyonema.zatec;
 
 import alain.niyonema.zatec.api.APIServlet;
 import alain.niyonema.zatec.functions.HousesFetch;
+import alain.niyonema.zatec.utils.AlnUtils;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import org.junit.jupiter.api.*;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -13,9 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class HousesFetchTest {
 
-    private APIServlet apiServlet;
     private MockHttpServletRequest request;
-    private MockHttpServletResponse response;
 
     @BeforeAll
     public static void beforeAll() {
@@ -30,21 +31,31 @@ public class HousesFetchTest {
     public void processRequestTest() throws IOException {
         System.out.println("TEST: processRequest");
 
-        apiServlet = new APIServlet();
         request = new MockHttpServletRequest();
-        response = new MockHttpServletResponse();
 
-        apiServlet.doGet(request, response);
-
-        assertEquals(16, response.getContentLength());
-        assertEquals(200, response.getStatus());
+        request.addParameter("page", "1");
+        request.addParameter("pageSize", "10");
 
         HousesFetch housesFetch = new HousesFetch();
 
         String jsonResponse = housesFetch.processRequest(request);
+        JsonObject jsonObject = AlnUtils.toJsonObject(jsonResponse);
 
-        assertEquals(4, jsonResponse.length());
+        assertNotEquals(0, jsonResponse.length());
+        assertNotNull(jsonObject.get("data"));
+        assertNotNull(jsonObject.get("counts"));
 
+
+        request.addParameter("name", "House Algood");
+        request.addParameter("match", "true");
+
+        jsonResponse = housesFetch.processRequest(request);
+        jsonObject = AlnUtils.toJsonObject(jsonResponse);
+
+        JsonArray jsonData = AlnUtils.toJsonArray(jsonObject.get("data").getAsString());
+
+        assertNotNull(jsonData);
+        assertEquals(1, jsonObject.get("counts").getAsInt());
     }
 
     @AfterEach

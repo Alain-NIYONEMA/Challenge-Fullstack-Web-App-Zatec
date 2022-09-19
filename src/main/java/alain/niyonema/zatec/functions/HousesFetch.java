@@ -4,6 +4,7 @@ import alain.niyonema.zatec.constants.HouseParams;
 import alain.niyonema.zatec.models.House;
 import alain.niyonema.zatec.utils.AlnUtils;
 import alain.niyonema.zatec.utils.HouseUtils;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
@@ -42,8 +43,7 @@ public class HousesFetch {
         if(!AlnUtils.isEmpty(name)) {
             int limit = 1000;
             if(match) {
-                name = URLEncoder.encode(name, "UTF-8");
-                params += "&name=" + name;
+                params += "&name=" + URLEncoder.encode(name, "UTF-8");
             }
             params += "&page=" + 1;
             params += "&pageSize=" + limit;
@@ -58,8 +58,8 @@ public class HousesFetch {
         }
 
         // compute: page number, page size and offset
-        int pageNo = AlnUtils.toInt(page, 0);
-        int pageSizeNo = AlnUtils.toInt(pageSize, 0);
+        int pageNo = AlnUtils.toInt(page, 1);
+        int pageSizeNo = AlnUtils.toInt(pageSize, 10);
         int offset = pageNo <= 1 ? 0 : pageNo == 2 ? pageSizeNo : (pageNo * pageSizeNo) - pageSizeNo;
 
         // append PARS to URL

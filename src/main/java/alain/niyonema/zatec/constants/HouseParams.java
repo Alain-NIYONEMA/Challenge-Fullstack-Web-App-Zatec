@@ -3,7 +3,8 @@ package alain.niyonema.zatec.constants;
 
 public class HouseParams {
 
-    public static final String SERVER_API_LINK = "https://www.anapioficeandfire.com/api/houses";
+    public static final String SERVER_API_URL = "https://www.anapioficeandfire.com/api/";
+    public static final String SERVER_API_URL_HOUSES = SERVER_API_URL + "houses";
 
 
     public static final String DATA_ID = "id";

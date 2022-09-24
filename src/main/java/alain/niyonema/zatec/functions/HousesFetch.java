@@ -29,6 +29,7 @@ public class HousesFetch {
         String page = request.getParameter("page");
         String pageSize = request.getParameter("pageSize");
         boolean match = Boolean.parseBoolean(request.getParameter("match"));
+        String filter = request.getParameter("filter");
 
 
         // build URL parameter
@@ -63,7 +64,7 @@ public class HousesFetch {
         int offset = pageNo <= 1 ? 0 : pageNo == 2 ? pageSizeNo : (pageNo * pageSizeNo) - pageSizeNo;
 
         // append PARS to URL
-        String link = HouseParams.SERVER_API_LINK +""+ params;
+        String link = HouseParams.SERVER_API_URL_HOUSES +""+ params;
 
         // fetch the API url
         URL url = new URL(link);
@@ -79,7 +80,8 @@ public class HousesFetch {
         }
 
         // parse response content
-        responseMessage = stringBuilder.toString();
+        responseMessage = stringBuilder.toString().replace(HouseParams.SERVER_API_URL, "");
+
 
         connection.disconnect();
 
@@ -96,7 +98,7 @@ public class HousesFetch {
             String data = "{}";
             int counts = 0;
 
-            List<House> listHouses = HouseUtils.fromJSON(jsonArray, name, offset, pageSizeNo, match);
+            List<House> listHouses = HouseUtils.fromJSON(jsonArray, name, offset, pageSizeNo, match, filter);
 
             if(listHouses != null && listHouses.size() > 0) {
                 data = HouseUtils.toJsonArray(listHouses).toString();

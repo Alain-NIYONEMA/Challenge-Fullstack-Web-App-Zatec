@@ -7,11 +7,13 @@ let keyword = "";
 let page = 1;
 let pageSize = 6;
 let match = false;
+let filter = "";
 
 
 // initialize VIEWS
 const viewBack = document.querySelector(".ztc-alain-nav__top-menu-back");
 const viewRefresh = document.querySelector(".ztc-alain-nav__top-menu-refresh");
+const checkBoxImages = document.querySelector(".ztc-alain-houses-filter-images input");
 
 
 // load initial data
@@ -51,6 +53,15 @@ document.querySelector(".ztc-alain-search-form input").addEventListener("change"
         document.querySelector(".ztc-alain-search-form button").removeAttribute("disabled");
     }
 
+    if(keyword.length === 0) {
+
+        // switch views
+        routeViews();
+
+        // call 'search' function
+        onSearchHouses();
+    }
+
 });
 
 
@@ -75,11 +86,32 @@ document.querySelector(".ztc-alain-houses-filter-size select").addEventListener(
 });
 
 
+// onChange "FILTER - Content"
+document.querySelector(".ztc-alain-houses-filter-content select").addEventListener("change", function () {
+
+    // update "filter" value
+    filter = this.value;
+
+    // call 'loadData' function
+    onLoadHouses();
+
+});
+
+
 // onChange "FILTER - Match"
 document.querySelector(".ztc-alain-houses-filter-match input").addEventListener("change", function () {
 
     // update "pageSize" value
     match = this.checked;
+
+    // call 'loadData' function
+    onLoadHouses();
+
+});
+
+
+// onChange "Show Images"
+document.querySelector(".ztc-alain-houses-filter-images input").addEventListener("change", function () {
 
     // call 'loadData' function
     onLoadHouses();
@@ -101,7 +133,7 @@ function onLoadHouses () {
     document.querySelector(".ztc-alain-load-more").style.display = "none";
 
     // fetch API
-    getHouses(keyword, page, pageSize, match)
+    getHouses(keyword, page, pageSize, match, filter)
         .then((response) => {
 
             const counts = parseInt(response.counts);
@@ -154,7 +186,7 @@ function onSearchHouses() {
     document.querySelector(".ztc-alain-load-more").style.display = "none";
 
     // fetch API
-    searchHouses(keyword, page, pageSize, match)
+    searchHouses(keyword, page, pageSize, match, filter)
         .then((response) => {
 
             const counts = parseInt(response.counts);
@@ -204,7 +236,7 @@ function onLoadMoreHouses () {
     document.querySelector(".ztc-alain-load-more").style.display = "block";
 
     // fetch API
-    getHouses(keyword, page, pageSize, match)
+    getHouses(keyword, page, pageSize, match, filter)
         .then((response) => {
 
             const counts = parseInt(response.counts);
@@ -239,22 +271,27 @@ function onLoadMoreHouses () {
 
 // get "VIEW of HOUSE ITEM Card"
 function viewHouseItemCard(itemHouse, index) {
+    let id = checkBoxImages.checked ? itemHouse.id % 7 : 0;
+    const image = "house-"+(id)+".jpg";
+    const imageUrl = ROOT_URL + "/public/images/"+image;
     return `
         <div class="ztc-alain-houses__item">
             <div class="ztc-alain-houses__item-image">
-                <img class="ztc-alain-houses__item-img" src="${ROOT_URL}/public/logo-dark.png" alt=""/>
+                <img class="ztc-alain-houses__item-img" src="${imageUrl}" alt="${itemHouse.name}"/>
             </div>
             <div class="ztc-alain-house-item__content">
                 <div class="ztc-alain-houses__item-title">
-                    ${itemHouse.id}. ${highlightKeyword(itemHouse.name, keyword)}
+                    ${itemHouse.id}. ${filter === "all" || filter === "" ? highlightKeyword(itemHouse.name, keyword) : itemHouse.name}
                 </div>
                 <div class="ztc-alain-houses__item-details">
-                    ${itemHouse.coatOfArms}
+                    ${filter === "all" ? highlightKeyword(itemHouse.coatOfArms, keyword) : itemHouse.coatOfArms}
                 </div>
             </div>
             <div class="ztc-alain-houses__item-footer">
                 <div class="ztc-alain-houses__item-region">
-                    ${itemHouse.region}
+                    <a>
+                        ${filter === "all" || filter === "region" ? highlightKeyword(itemHouse.region, keyword) : itemHouse.region}
+                    </a>
                 </div>
                 <div class="ztc-alain-houses__item-button">
                     <a onclick="viewHouse('${itemHouse.id}')">
@@ -270,6 +307,8 @@ function viewHouseItemCard(itemHouse, index) {
 
 // get "VIEW of HOUSE ITEM"
 function viewHouseItem(itemHouse, index) {
+    const image = "houses-"+(itemHouse.id % 4)+".jpg";
+    const imageUrl = ROOT_URL + "/public/images/"+image;
     return `
         <div class="ztc-alain-house__item">
             <div class="ztc-alain-house__item-head">
@@ -277,73 +316,73 @@ function viewHouseItem(itemHouse, index) {
                     ${itemHouse.name}
                 </div>
             </div>
-            <div class="ztc-alain-house__item-image">
-                <img class="ztc-alain-house__item-img" src="${ROOT_URL}/public/images/houses-1.jpg" alt=""/>
+            <div class="ztc-alain-house__item-image" style="background-image: url('${imageUrl}');">
+                <img class="ztc-alain-house__item-img" src="${imageUrl}" alt=""/>
             </div>
             <div class="ztc-alain-house-item__content">
                 <div class="ztc-alain-house__item-title-1">
                
                 </div>
                 <div class="ztc-alain-house__item-details">
-                    <div>
+                    <div class="${isEmpty(itemHouse.coatOfArms) ? 'ztc-alain-hidden' : ''}">
                         <i class="fa fa-dot-circle-o"></i>
                         <span>Coat Of Arms:</span>
                         <p>${itemHouse.coatOfArms}</p>
                     </div>
-                    <div>
+                    <div class="${isEmpty(itemHouse.seats) ? 'ztc-alain-hidden' : ''}">
                         <i class="fa fa-dot-circle-o"></i>
-                        <span>EATS:</span>
+                        <span>SEATS:</span>
                         <p>${itemHouse.seats}</p>
                     </div>
-                    <div>
+                    <div class="${isEmpty(itemHouse.region) ? 'ztc-alain-hidden' : ''}">
                         <i class="fa fa-dot-circle-o"></i>
                         <span>REGION:</span>
                         <p>${itemHouse.region}</p>
                     </div>
-                    <div>
+                    <div class="${isEmpty(itemHouse.heir) ? 'ztc-alain-hidden' : ''}">
                         <i class="fa fa-dot-circle-o"></i>
                         <span>HEIR:</span>
-                        <p>${itemHouse.heir}</p>
+                        <p>${getRelatedCharacters(itemHouse.heir)}</p>
                     </div>
-                    <div>
+                    <div class="${isEmpty(itemHouse.titles) ? 'ztc-alain-hidden' : ''}">
                         <i class="fa fa-dot-circle-o"></i>
                         <span>TITLES:</span>
                         <p>${itemHouse.titles}</p>
                     </div>
-                    <div>
+                    <div class="${isEmpty(itemHouse.currentLord) ? 'ztc-alain-hidden' : ''}">
                         <i class="fa fa-dot-circle-o"></i>
                         <span>CURRENT LORD:</span>
-                        <p>${itemHouse.currentLord}</p>
+                        <p>${getRelatedCharacters(itemHouse.currentLord)}</p>
                     </div>
-                    <div>
+                    <div class="${isEmpty(itemHouse.founded) ? 'ztc-alain-hidden' : ''}">
                         <i class="fa fa-dot-circle-o"></i>
                         <span>FOUNDED:</span>
                         <p>${itemHouse.founded}</p>
                     </div>
-                    <div>
+                    <div class="${isEmpty(itemHouse.heir) ? 'ztc-alain-hidden' : ''}">
                         <i class="fa fa-dot-circle-o"></i>
                         <span>HEIR:</span>
-                        <p>${itemHouse.heir}</p>
+                        <p>${getRelatedCharacters(itemHouse.heir)}</p>
                     </div>
-                    <div>
+                    <div class="${isEmpty(itemHouse.diedOut) ? 'ztc-alain-hidden' : ''}">
                         <i class="fa fa-dot-circle-o"></i>
                         <span>DIED OUT:</span>
                         <p>${itemHouse.diedOut}</p>
                     </div>
-                    <div>
+                    <div class="${isEmpty(itemHouse.ancestralWeapons) ? 'ztc-alain-hidden' : ''}">
                         <i class="fa fa-dot-circle-o"></i>
                         <span>Ancestral Weapons:</span>
-                        <p>${itemHouse.ancestralWeapons}</p>
+                        <p>${getRelatedHouses(itemHouse.ancestralWeapons)}</p>
                     </div>
-                    <div>
+                    <div class="${isEmpty(itemHouse.cadetBranches) ? 'ztc-alain-hidden' : ''}">
                         <i class="fa fa-dot-circle-o"></i>
                         <span>Cadet Branches:</span>
-                        <p>${itemHouse.cadetBranches}</p>
+                        <p>${getRelatedHouses(itemHouse.cadetBranches)}</p>
                     </div>
-                    <div>
+                    <div class="${isEmpty(itemHouse.swornMembers) ? 'ztc-alain-hidden' : ''}">
                         <i class="fa fa-dot-circle-o"></i>
                         <span>Sworn Members:</span>
-                        <p>${itemHouse.swornMembers}</p>
+                        <p>${getRelatedCharacters(itemHouse.swornMembers)}</p>
                     </div>
                 </div>
             </div>

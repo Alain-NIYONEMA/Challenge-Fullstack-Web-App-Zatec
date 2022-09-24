@@ -7,31 +7,14 @@
 
 <div class="ztc-alain-houses">
 
-    <div class="ztc-alain-houses-filter">
-
-        <div class="ztc-alain-houses-filter-match">
-            <span>Match:</span>
-            <input type="checkbox">
-        </div>
-
-        <div class="ztc-alain-houses-filter-size">
-            <span>Items:</span>
-            <select>
-                <option value="3">3</option>
-                <option selected value="6">6</option>
-                <option value="12">12</option>
-            </select>
-        </div>
-
-    </div>
+    <jsp:include page='/src/components/filter.jsp'>
+        <jsp:param name="" value=""/>
+    </jsp:include>
 
     <div class="ztc-alain-houses-list"></div>
 
-    <div class="ztc-alain-load-more">
-        <button class="ztc-alain-load-more-btn">
-            <i class="fa fa-arrow-down"></i>
-            Load More
-        </button>
-    </div>
+    <jsp:include page='/src/components/load-more.jsp'>
+        <jsp:param name="" value=""/>
+    </jsp:include>
 
 </div>

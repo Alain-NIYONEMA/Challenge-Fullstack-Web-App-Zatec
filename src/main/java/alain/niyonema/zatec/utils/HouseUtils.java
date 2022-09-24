@@ -16,7 +16,7 @@ public class HouseUtils {
     /**
      convert JsonArray into list of House objects
      */
-    public static List<House> fromJSON(JsonArray jsonArray, String keyword, int offset, int pageSize, boolean match) {
+    public static List<House> fromJSON(JsonArray jsonArray, String keyword, int offset, int pageSize, boolean match, String filter) {
         List<House> listHouses;
 
         if(jsonArray != null) {
@@ -37,7 +37,16 @@ public class HouseUtils {
 
                     String keywords = (""+ house.getName()).toLowerCase();
 
-                    boolean equal = keywords.equals(keyword.toLowerCase());
+                    if(!AlnUtils.isEmpty(filter)) {
+                        if(filter.equalsIgnoreCase("region")) {
+                            keywords += (" "+ house.getRegion()).toLowerCase();
+
+                        }else if(filter.equalsIgnoreCase("all")) {
+                            keywords += (" "+ house.getCoatOfArms() +" "+ house.getRegion()).toLowerCase();
+                        }
+                    }
+
+                    boolean equal = house.getName().equalsIgnoreCase(keyword);
                     boolean like = keywords.contains(keyword.toLowerCase());
 
                     if((match && equal) || (!match && like)) {

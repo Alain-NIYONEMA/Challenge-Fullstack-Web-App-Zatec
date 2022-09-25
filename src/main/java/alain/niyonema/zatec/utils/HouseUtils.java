@@ -1,3 +1,9 @@
+/*
+  Created by IntelliJ IDEA.
+  User: Alain-NIYONEMA
+  Project: ztc-Alain
+  Company: Zatec
+*/
 package alain.niyonema.zatec.utils;
 
 import alain.niyonema.zatec.constants.Config;
@@ -35,15 +41,20 @@ public class HouseUtils {
 
                 }else {
 
-                    String keywords = (""+ house.getName()).toLowerCase();
+                    String keywords = "";
 
                     if(!AlnUtils.isEmpty(filter)) {
+                        match = false;
+
                         if(filter.equalsIgnoreCase("region")) {
                             keywords += (" "+ house.getRegion()).toLowerCase();
 
                         }else if(filter.equalsIgnoreCase("all")) {
-                            keywords += (" "+ house.getCoatOfArms() +" "+ house.getRegion()).toLowerCase();
+                            keywords += (""+ house.getName() +" "+ house.getCoatOfArms() +" "+ house.getRegion()).toLowerCase();
                         }
+
+                    }else {
+                        keywords = (""+ house.getName()).toLowerCase();
                     }
 
                     boolean equal = house.getName().equalsIgnoreCase(keyword);

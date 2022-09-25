@@ -1,6 +1,8 @@
 <%--
   Created by IntelliJ IDEA.
   User: Alain-NIYONEMA
+  Project: ztc-Alain
+  Company: Zatec
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
@@ -12,7 +14,7 @@
             <span>Back</span>
         </a>
 
-        <a class="ztc-alain-nav__top-menu-refresh" onclick="onLoadHouses()">
+        <a class="ztc-alain-nav__top-menu-refresh" onclick="onRefreshHouses()">
             <i class="fa fa-refresh"></i>
             <span>Refresh</span>
         </a>

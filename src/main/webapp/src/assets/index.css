@@ -40,9 +40,9 @@
     display: flex;
     width: 100%;
     overflow: hidden;
-    background-color: #ffffff;
+    background-color: #009688;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-    border-bottom: solid #8ebcb8 3px;
+    border-bottom: solid #98e0da  4px;
 }
 .ztc-alain-nav__top-menu {
     width: 40%;
@@ -56,6 +56,7 @@
 .ztc-alain-nav__top a {
     float: left;
     color: black;
+    font-weight: 600;
     text-align: center;
     cursor: pointer;
     padding: 14px 16px;
@@ -65,7 +66,7 @@
     font-size: 17px;
 }
 .ztc-alain-nav__top a:hover {
-    background-color: #ddd;
+    background-color: #52beae;
     color: black;
 }
 .ztc-alain-nav__top a.active {
@@ -73,10 +74,10 @@
     color: white;
 }
 .ztc-alain-nav__top .fa {
-    background: #016e54;
+    background: #FFFFFF;
     border-radius: 50%;
     padding: 5px;
-    color: #FFFFFF;
+    color: #0b9574;
 }
 .ztc-alain-nav__top-logo {
     width: 20%;
@@ -86,7 +87,8 @@
     margin: 4px 8px;
     text-align: center;
     border-radius: 10px;
-    border: solid 2px #016e54;
+    border: solid 2px #54b8a0;
+    background-color: #FFFFFF;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
 }
 .ztc-alain-nav__top-logo img {
@@ -119,17 +121,18 @@
     margin-left: 16px;
     padding: 6px;
     font-size: 17px;
-    background: #d9d9d9;
     border-radius: 10px 0 0 10px;
-    border: solid 2px #016e54;
+    border: solid #165143 2px;
     background: #d9d9d9;
+    color: #067469;
+    font-weight: 600;
 }
 .ztc-alain-search-container button {
     width: 50px;
     height: 46px;
     float: right;
     padding: 6px 10px;
-    background: #009688;
+    background: #6dded3;
     color: #ffffff;
     font-size: 17px;
     border: none;
@@ -230,6 +233,9 @@
     flex: 70%;
     font-weight: 600;
     text-decoration: overline;
+}
+.ztc-alain-houses__item-region a {
+    cursor: pointer;
 }
 .ztc-alain-houses__item-region span {
     background: #15d5c3;
@@ -361,8 +367,8 @@
     width: calc(100% - 16px);
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     transition: 0.3s;
-    margin: 8px;
     background: #ffffff;
+    margin: 8px 8px 250px;
 }
 .ztc-alain-house__item:hover {
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
@@ -390,8 +396,8 @@
 .ztc-alain-house__item-head {
     position: absolute;
     width: 92%;
-    height: 60px;
-    font-size: 24px;
+    min-height: 60px;
+    font-size: 44px;
     font-weight: 600;
     margin-top: 28px;
     padding: 4px;
@@ -681,7 +687,7 @@
          padding-right: 0;
     }
     .ztc-alain-houses__item {
-        width: calc(100% - 32px);
+        width: calc(100% - 20px);
     }
     .ztc-alain-house__item-details div {
         margin: 10px 10px;
@@ -701,6 +707,10 @@
     .ztc-alain-houses-filter::-webkit-scrollbar-thumb {
         background: #009688;
         border-radius: 10px;
+    }
+
+    .ztc-alain-house__item-head {
+        font-size: 24px;
     }
 
 }

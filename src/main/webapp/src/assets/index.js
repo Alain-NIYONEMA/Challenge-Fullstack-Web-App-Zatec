@@ -118,6 +118,32 @@ document.querySelector(".ztc-alain-houses-filter-images input").addEventListener
 
 });
 
+// load houses per region
+function searchRegion(region) {
+
+    document.querySelector(".ztc-alain-search-form input").value = region;
+
+    document.querySelector(".ztc-alain-houses-filter-content select").options.selectedIndex = 1;
+
+    keyword = region;
+    filter = "region";
+
+    // call 'loadData' function
+    onLoadHouses();
+
+}
+
+// on "LOAD" HOUSES
+function onRefreshHouses () {
+
+    document.querySelector(".ztc-alain-search-form input").value = "";
+
+    keyword = "";
+
+    // call 'loadData' function
+    onLoadHouses();
+
+}
 
 // on "LOAD" HOUSES
 function onLoadHouses () {
@@ -289,7 +315,7 @@ function viewHouseItemCard(itemHouse, index) {
             </div>
             <div class="ztc-alain-houses__item-footer">
                 <div class="ztc-alain-houses__item-region">
-                    <a>
+                    <a onclick="searchRegion('${itemHouse.region}')">
                         ${filter === "all" || filter === "region" ? highlightKeyword(itemHouse.region, keyword) : itemHouse.region}
                     </a>
                 </div>

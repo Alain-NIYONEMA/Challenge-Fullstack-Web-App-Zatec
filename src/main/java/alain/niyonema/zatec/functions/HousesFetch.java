@@ -1,3 +1,9 @@
+/*
+  Created by IntelliJ IDEA.
+  User: Alain-NIYONEMA
+  Project: ztc-Alain
+  Company: Zatec
+*/
 package alain.niyonema.zatec.functions;
 
 import alain.niyonema.zatec.constants.HouseParams;
@@ -43,7 +49,7 @@ public class HousesFetch {
 
         if(!AlnUtils.isEmpty(name)) {
             int limit = 1000;
-            if(match) {
+            if(match && AlnUtils.isEmpty(filter)) {
                 params += "&name=" + URLEncoder.encode(name, "UTF-8");
             }
             params += "&page=" + 1;

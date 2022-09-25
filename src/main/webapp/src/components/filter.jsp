@@ -23,7 +23,7 @@
 
     <div class="ztc-alain-houses-filter-content">
         <label>
-            <span>Search:</span>
+            <span>Filter:</span>
             <select>
                 <option selected value="">Title only</option>
                 <option value="region">Region only</option>

@@ -12,7 +12,7 @@ Design and UX are completely up to your creativity.
 
 ### APIs and Docs
 
-Use the following free and open API to gather data data:
+Use the following free and open API to gather data:
 
 - [Game of Thrones API](https://anapioficeandfire.com/Documentation#houses)
 

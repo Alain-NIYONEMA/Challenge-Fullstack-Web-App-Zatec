@@ -13,6 +13,10 @@ public class HouseParams {
      * The Root resource contains information about all available resources in the API
      */
     public static final String SERVER_API_URL = "https://www.anapioficeandfire.com/api/";
+
+    /**
+     * End-point to fetch houses
+     */
     public static final String SERVER_API_URL_HOUSES = SERVER_API_URL + "houses";
 
 

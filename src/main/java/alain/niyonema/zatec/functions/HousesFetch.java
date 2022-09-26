@@ -27,6 +27,12 @@ import java.util.List;
 public class HousesFetch {
 
 
+    /**
+     * this a function to fetch houses from the API through Http-connection
+     * @param request
+     * @return list of filtered houses as a String in json format
+     * @throws IOException
+     */
     public String processRequest(HttpServletRequest request) throws IOException {
 
         // retrieve request parameters
@@ -111,6 +117,7 @@ public class HousesFetch {
                 counts = listHouses.size();
             }
 
+            // set results in json data
             jsonData.addProperty("data", data);
             jsonData.addProperty("counts", counts);
 
@@ -129,6 +136,7 @@ public class HousesFetch {
                 counts = 1;
             }
 
+            // set results in json data
             jsonData.addProperty("data", data);
             jsonData.addProperty("counts", counts);
 

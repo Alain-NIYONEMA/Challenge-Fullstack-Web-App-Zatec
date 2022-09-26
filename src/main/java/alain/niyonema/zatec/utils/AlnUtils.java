@@ -17,6 +17,7 @@ public class AlnUtils {
 
     /**
     check if text is not empty
+     @return true is the text is empty
      */
     public static boolean isEmpty(String text) {
         return text == null || text.length() == 0;
@@ -25,6 +26,7 @@ public class AlnUtils {
 
     /**
     convert text to integer
+     @return the parsed integer, or the placeholder if the text is not numeric
      */
     public static int toInt(String text, int placeholder) {
         int number;

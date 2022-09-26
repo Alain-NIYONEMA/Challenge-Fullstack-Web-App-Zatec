@@ -21,6 +21,7 @@ public class HouseUtils {
 
     /**
      convert JsonArray into list of House objects
+     @return List<House>
      */
     public static List<House> fromJSON(JsonArray jsonArray, String keyword, int offset, int pageSize, boolean match, String filter) {
         List<House> listHouses;
@@ -35,37 +36,46 @@ public class HouseUtils {
                 House house = fromJSON(element.getAsJsonObject());
 
                 if(AlnUtils.isEmpty(keyword)) {
+                    // with no query keyword, add all without filterinf
                     i++;
 
                     listHouses.add(house);
 
                 }else {
+                    // with query keyword
 
                     String keywords = "";
 
                     if(!AlnUtils.isEmpty(filter)) {
                         match = false;
 
+                        // with filtering by region only
                         if(filter.equalsIgnoreCase("region")) {
                             keywords += (" "+ house.getRegion()).toLowerCase();
 
+                            // with filtering in whole contents
                         }else if(filter.equalsIgnoreCase("all")) {
                             keywords += (""+ house.getName() +" "+ house.getCoatOfArms() +" "+ house.getRegion()).toLowerCase();
                         }
 
                     }else {
+                        // with filtering by title only
                         keywords = (""+ house.getName()).toLowerCase();
                     }
 
                     boolean equal = house.getName().equalsIgnoreCase(keyword);
                     boolean like = keywords.contains(keyword.toLowerCase());
 
+                    // check conditions before adding a result in the list
                     if((match && equal) || (!match && like)) {
                         i++;
 
+                        // check the starting result
                         if(i <= offset) {
                             continue;
                         }
+
+                        // check the ending result
                         if(i > offset + pageSize) {
                             break;
                         }
@@ -85,7 +95,8 @@ public class HouseUtils {
 
 
     /**
-    convert JsonObject into House object
+    *convert JsonObject into House object
+     * @return House
      */
     public static House fromJSON(JsonObject jsonObject) {
 
@@ -173,6 +184,10 @@ public class HouseUtils {
     }
 
 
+    /**
+     * converts a list of houses to a Json array
+     * @return JsonArray
+     */
     public static JsonArray toJsonArray(List<House> listHouses) {
         JsonArray jsonArray;
 
@@ -194,7 +209,10 @@ public class HouseUtils {
         return null;
     }
 
-
+    /**
+    * convert a house object to JsonObject
+     * @return JsonObject
+     */
     public static JsonObject toJsonObject(House house) {
         JsonObject jsonObject;
 

@@ -1,8 +1,10 @@
 // Created by IntelliJ IDEA.
 // User: Alain-NIYONEMA
 
+// end-point of our API
 const API_URL = ROOT_URL + "/api";
 
+// function to call our API end-point with a GET or POST method
 async function fetchAPI(url, method, data) {
 
     if(method !== "GET") {

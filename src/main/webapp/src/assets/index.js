@@ -133,11 +133,11 @@ function searchRegion(region) {
 
 }
 
-// on "LOAD" HOUSES
+// on "Re-LOAD" HOUSES
 function onRefreshHouses () {
 
+    // reset the search query
     document.querySelector(".ztc-alain-search-form input").value = "";
-
     keyword = "";
 
     // call 'loadData' function

@@ -9,6 +9,9 @@ package alain.niyonema.zatec.constants;
 
 public class Config {
 
+    /**
+     * Application URL
+     */
     public static final String APP_URL = "";
 
 }
